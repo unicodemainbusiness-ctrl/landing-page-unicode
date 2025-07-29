@@ -1,6 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
+import {
+  SiTailwindcss,
+  SiNextdotjs,
+  SiReact,
+  SiNestjs,
+  SiNodedotjs,
+  SiPostgresql,
+  SiTypescript,
+  SiMongodb,
+  SiHtml5,
+  SiCss3,
+  SiJavascript,
+  SiSupabase,
+  SiMysql,
+  SiZod,
+  SiVercel,
+  SiRailway,
+  SiGit,
+  SiGithub,
+  SiVite,
+  SiEslint,
+  SiFigma,
+  SiRedux,
+  SiPrettier,
+  SiShadcnui,
+  SiDaisyui,
+  SiPrisma,
+  SiExpress,
+  SiAuth0
+} from 'react-icons/si'
+
 // Anda mungkin perlu menginstal lucide-react: npm install lucide-react
 import {
   ArrowRight,
@@ -12,9 +43,9 @@ import {
   BarChart,
   MessageSquare
 } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 
 const keywords = [
@@ -99,35 +130,61 @@ const services = [
   }
 ]
 const stacks_logo = [
-  { name: 'Tailwind', src: '/logo/tailwind.svg' },
-  { name: 'Next.js', src: '/logo/nextjs.svg' },
-  { name: 'React', src: '/logo/react.svg' },
-  { name: 'NestJS', src: '/logo/nestjs.svg' },
-  { name: 'Node.js', src: '/logo/nodejs.svg' },
-  { name: 'PostgreSQL', src: '/logo/postgresql.svg' },
-  { name: 'TypeScript', src: '/logo/typescript.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-  { name: 'MongoDB', src: '/logo/mongodb.svg' },
-
+  {
+    name: 'Tailwind',
+    logo: <SiTailwindcss color='#06B6D4' className='text-5xl' />
+  },
+  {
+    name: 'Next.js',
+    logo: <SiNextdotjs color='#000000' className='text-5xl' />
+  },
+  { name: 'React', logo: <SiReact color='#61DAFB' className='text-5xl' /> },
+  { name: 'NestJS', logo: <SiNestjs color='#E0234E' className='text-5xl' /> },
+  {
+    name: 'Node.js',
+    logo: <SiNodedotjs color='#339933' className='text-5xl' />
+  },
+  {
+    name: 'PostgreSQL',
+    logo: <SiPostgresql color='#336791' className='text-5xl' />
+  },
+  {
+    name: 'TypeScript',
+    logo: <SiTypescript color='#3178C6' className='text-5xl' />
+  },
+  { name: 'MongoDB', logo: <SiMongodb color='#47A248' className='text-5xl' /> },
+  { name: 'HTML', logo: <SiHtml5 color='#E34F26' className='text-5xl' /> },
+  { name: 'CSS', logo: <SiCss3 color='#1572B6' className='text-5xl' /> },
+  {
+    name: 'JavaScript',
+    logo: <SiJavascript color='#F7DF1E' className='text-5xl' />
+  },
+  {
+    name: 'Supabase',
+    logo: <SiSupabase color='#3ECF8E' className='text-5xl' />
+  },
+  { name: 'MySQL', logo: <SiMysql color='#4479A1' className='text-5xl' /> },
+  { name: 'Express', logo: <SiExpress color='#000000' className='text-5xl' /> },
+  { name: 'Zod', logo: <SiZod color='#3C3C3C' className='text-5xl' /> },
+  { name: 'Prisma', logo: <SiPrisma color='#2D3748' className='text-5xl' /> },
+  { name: 'Vercel', logo: <SiVercel color='#000000' className='text-5xl' /> },
+  { name: 'Railway', logo: <SiRailway color='#0B0D0E' className='text-5xl' /> },
+  { name: 'Git', logo: <SiGit color='#F05032' className='text-5xl' /> },
+  { name: 'GitHub', logo: <SiGithub color='#181717' className='text-5xl' /> },
+  { name: 'Vite', logo: <SiVite color='#646CFF' className='text-5xl' /> },
+  { name: 'ESLint', logo: <SiEslint color='#4B32C3' className='text-5xl' /> },
+  { name: 'Figma', logo: <SiFigma color='#F24E1E' className='text-5xl' /> },
+  { name: 'Redux', logo: <SiRedux color='#764ABC' className='text-5xl' /> },
+  {
+    name: 'Prettier',
+    logo: <SiPrettier color='#F7B93E' className='text-5xl' />
+  },
+  {
+    name: 'ShadCN UI',
+    logo: <SiShadcnui color='#000000' className='text-5xl' />
+  },
+  { name: 'DaisyUI', logo: <SiDaisyui color='#A855F7' className='text-5xl' /> },
+  { name: 'Auth0', logo: <SiAuth0 color='#EB5424' className='text-5xl' /> }
 ]
 
 import Marquee from 'react-fast-marquee'
@@ -231,6 +288,10 @@ const Header = () => {
 // Komponen Utama Halaman
 export default function UnicodeLandingPage () {
   const radius = 370
+
+  const ref = useRef(null)
+const isInView = useInView(ref, { once: true })
+
 
   const [mousePosition, setMousePosition] = useState({ x: -200, y: -200 })
 
@@ -485,6 +546,7 @@ export default function UnicodeLandingPage () {
                           alt={stack.name}
                           className='w-full h-full object-contain'
                         /> */}
+                        {stack.logo}
                       </div>
                     )
                   })}
@@ -492,10 +554,29 @@ export default function UnicodeLandingPage () {
               </div>
 
               {/* Text content */}
-              <div className='flex flex-col gap-4 relative bottom-36 items-center'>
-                <h2 className='text-3xl md:text-4xl font-bold text-center'>
-                  Let’s Build With the Best Stack
-                </h2>
+              <div className='flex flex-col gap-4 relative bottom-56 items-center'>
+                <motion.h2
+  ref={ref}
+  initial={{ clipPath: 'inset(0 50% 0 50%)', opacity: 0 }}
+  animate={
+    isInView
+      ? {
+          clipPath: 'inset(0 0% 0 0%)',
+          opacity: 1,
+          transition: {
+            duration: 2,
+            ease: 'linear',
+            clipPath: { delay: 0.2, duration: 2, ease: 'easeInOut' }
+          }
+        }
+      : {}
+  }
+  className='text-3xl md:text-4xl font-bold text-center whitespace-nowrap overflow-hidden'
+>
+  Let’s Build With the Best Stack
+</motion.h2>
+
+
                 <p className='text-gray-400 mt-3 mb-6 text-center max-w-lg'>
                   Explore modern web technologies we use to build robust,
                   scalable, and stunning digital experiences.

@@ -77,3 +77,18 @@ body {
   transition: all 0.5s ease-in-out;
 }
 
+
+@keyframes typeFromCenter {
+  0% {
+    clip-path: inset(0 50% 0 50%);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.typing-center {
+  animation: typeFromCenter 2s steps(30) forwards;
+  white-space: nowrap;
+  overflow: hidden;
+}
