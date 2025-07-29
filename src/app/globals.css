@@ -25,3 +25,55 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+@keyframes color-shift {
+  0%, 100% {
+    background: linear-gradient(to bottom right, #7c3aed, #ec4899); /* purple-600 to pink-500 */
+  }
+  33% {
+    background: linear-gradient(to bottom right, #3b82f6, #06b6d4); /* blue-500 to cyan-500 */
+  }
+  66% {
+    background: linear-gradient(to bottom right, #10b981, #f59e0b); /* green-500 to yellow-500 */
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Utility class */
+.bg-gradient-animation {
+  background: linear-gradient(-45deg, #7c3aed, #ec4899, #06b6d4, #10b981);
+  background-size: 400% 400%;
+}
+
+.animate-gradient {
+  animation: gradient 12s ease infinite;
+}
+
+.animate-color-shift {
+  animation: color-shift 9s infinite linear;
+}
+
+.group:hover .big-number {
+  opacity: 0.1;
+  transform: scale(1);
+  filter: blur(0px);
+}
+.big-number {
+  opacity: 0;
+  transform: scale(1.5);
+  filter: blur(8px);
+  transition: all 0.5s ease-in-out;
+}
+
