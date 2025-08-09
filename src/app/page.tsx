@@ -37,16 +37,11 @@ import {
   ArrowRight,
   Code,
   GraduationCap,
-  Users,
-  Menu,
-  Layers,
-  BarChart,
-  MessageSquare
+  Users
 } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 
 import { motion, useInView } from 'framer-motion'
-import Image from 'next/image'
 
 const keywords = [
   'Web Design',
@@ -188,6 +183,7 @@ const stacks_logo = [
 ]
 
 import Marquee from 'react-fast-marquee'
+import Navbar from './components/Navbar'
 
 const stacks = [
   'Next.js',
@@ -224,66 +220,6 @@ const PillarCard = ({ icon, title, children }: any) => (
 )
 
 // Komponen Header
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const navLinks = ['Layanan', 'Akademi', 'Komunitas', 'Tentang Kami']
-
-  return (
-    <header className='absolute top-0 left-0 right-0 z-50 px-4 py-4 sm:px-6 lg:px-8'>
-      <div className='container mx-auto'>
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center'>
-            <Layers className='w-8 h-8 mr-2 text-indigo-400' />
-            <span className='text-2xl font-bold text-white'>UNICODE</span>
-          </div>
-          <nav className='hidden lg:flex items-center space-x-8'>
-            {navLinks.map(link => (
-              <a
-                key={link}
-                href='#'
-                className='text-sm font-medium text-gray-300 transition-colors hover:text-white'
-              >
-                {link}
-              </a>
-            ))}
-          </nav>
-          <div className='hidden lg:block'>
-            <button className='px-5 py-2 text-sm font-semibold text-white transition-all bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-900'>
-              Hubungi Kami
-            </button>
-          </div>
-          <div className='lg:hidden'>
-            <button
-              title='button'
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className='p-2 text-gray-300 rounded-md hover:bg-gray-800'
-            >
-              <Menu className='w-6 h-6' />
-            </button>
-          </div>
-        </div>
-        {isMenuOpen && (
-          <div className='mt-4 lg:hidden bg-gray-800/90 rounded-lg p-4'>
-            <nav className='flex flex-col space-y-4'>
-              {navLinks.map(link => (
-                <a
-                  key={link}
-                  href='#'
-                  className='text-sm font-medium text-gray-300 transition-colors hover:text-white'
-                >
-                  {link}
-                </a>
-              ))}
-              <button className='w-full px-5 py-2 mt-2 text-sm font-semibold text-white transition-all bg-indigo-600 rounded-lg hover:bg-indigo-700'>
-                Hubungi Kami
-              </button>
-            </nav>
-          </div>
-        )}
-      </div>
-    </header>
-  )
-}
 
 // Komponen Utama Halaman
 export default function UnicodeLandingPage () {
@@ -347,11 +283,11 @@ const isInView = useInView(ref, { once: true })
             <div className='absolute bottom-[-15rem] left-[-15rem] w-[30rem] h-[30rem] bg-purple-900/40 rounded-full blur-3xl opacity-40'></div>
           </div>
 
-          <Header />
+          <Navbar />
 
           <main className='relative z-10'>
             {/* Hero Section */}
-            <section className='h-screen relative pt-32 pb-20 text-center sm:pt-40 lg:pt-48 overflow-hidden'>
+            <section className='h-screen relative flex justify-center items-center text-center overflow-hidden'>
               {/* LINGKARAN GRADASI BERPUTAR */}
               <div
                 className='absolute top-1/2 left-1/2 w-[50rem] h-[50rem] sm:w-[68rem] sm:h-[68rem] -z-10 animate-slow-spin'
@@ -581,7 +517,7 @@ const isInView = useInView(ref, { once: true })
                   Explore modern web technologies we use to build robust,
                   scalable, and stunning digital experiences.
                 </p>
-                <button className='w-1/2  bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full transition'>
+                <button className='btn btn-primary btn-lg rounded-lg w-1/2'>
                   Contact Us
                 </button>
               </div>
