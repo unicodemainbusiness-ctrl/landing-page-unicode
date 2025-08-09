@@ -290,8 +290,7 @@ export default function UnicodeLandingPage () {
   const radius = 370
 
   const ref = useRef(null)
-const isInView = useInView(ref, { once: true })
-
+  const isInView = useInView(ref, { once: true })
 
   const [mousePosition, setMousePosition] = useState({ x: -200, y: -200 })
 
@@ -556,26 +555,29 @@ const isInView = useInView(ref, { once: true })
               {/* Text content */}
               <div className='flex flex-col gap-4 relative bottom-56 items-center'>
                 <motion.h2
-  ref={ref}
-  initial={{ clipPath: 'inset(0 50% 0 50%)', opacity: 0 }}
-  animate={
-    isInView
-      ? {
-          clipPath: 'inset(0 0% 0 0%)',
-          opacity: 1,
-          transition: {
-            duration: 2,
-            ease: 'linear',
-            clipPath: { delay: 0.2, duration: 2, ease: 'easeInOut' }
-          }
-        }
-      : {}
-  }
-  className='text-3xl md:text-4xl font-bold text-center whitespace-nowrap overflow-hidden'
->
-  Let’s Build With the Best Stack
-</motion.h2>
-
+                  ref={ref}
+                  initial={{ clipPath: 'inset(0 50% 0 50%)', opacity: 0 }}
+                  animate={
+                    isInView
+                      ? {
+                          clipPath: 'inset(0 0% 0 0%)',
+                          opacity: 1,
+                          transition: {
+                            duration: 2,
+                            ease: 'linear',
+                            clipPath: {
+                              delay: 0.2,
+                              duration: 2,
+                              ease: 'easeInOut'
+                            }
+                          }
+                        }
+                      : {}
+                  }
+                  className='text-3xl md:text-4xl font-bold text-center whitespace-nowrap overflow-hidden'
+                >
+                  Let’s Build With the Best Stack
+                </motion.h2>
 
                 <p className='text-gray-400 mt-3 mb-6 text-center max-w-lg'>
                   Explore modern web technologies we use to build robust,
