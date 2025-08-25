@@ -535,7 +535,7 @@ export default function UnicodeLandingPage() {
 
             <section
               ref={teknologiRef}
-              className="relative pt-20 pb-8 md:pt-28 md:pb-28 overflow-hidden text-white flex flex-col items-center justify-center"
+              className="relative pt-20 pb-16 md:pt-28 md:pb-28 overflow-hidden text-white flex flex-col items-center justify-center"
             >
               <style jsx>{`
                 @keyframes rotate-circle {
@@ -553,7 +553,7 @@ export default function UnicodeLandingPage() {
 
               {/* Circle Logo */}
               <div className="relative w-[250px] h-[250px] md:w-[400px] md:h-[400px]  md:mb-20">
-                <div className="absolute inset-0 spin-circle origin-center top-64 md:top-56">
+                <div className="absolute inset-0 spin-circle origin-center top-64 md:top-72">
                   {stacks_logo.map((stack, index) => {
                     const angle = (360 / stacks_logo.length) * index;
                     return (
