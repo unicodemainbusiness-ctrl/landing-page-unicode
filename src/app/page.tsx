@@ -342,7 +342,7 @@ export default function UnicodeLandingPage () {
             className='absolute top-0 left-0 w-full h-full'
             aria-hidden='true'
           >
-            <div className='absolute top-[-10rem] right-[-10rem] w-[40rem] h-[40rem] bg-indigo-900/50 rounded-full blur-3xl opacity-30'></div>
+            <div className='absolute top-[-10rem] right-[-10rem] w-[40rem] h-[40rem] bg-green-900/50 rounded-full blur-3xl opacity-30'></div>
             <div className='absolute bottom-[-15rem] left-[-15rem] w-[30rem] h-[30rem] bg-purple-900/40 rounded-full blur-3xl opacity-40'></div>
           </div>
 
