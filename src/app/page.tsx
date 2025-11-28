@@ -51,6 +51,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Marquee from "react-fast-marquee";
+import { useRouter } from "next/navigation";
 
 const keywords = [
   "Web Development",
@@ -216,6 +217,8 @@ const Header = ({ refs }: any) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
@@ -291,7 +294,7 @@ const Header = ({ refs }: any) => {
                   {link.name}
                 </button>
               ))}
-              <button className="btn btn-primary rounded-md">
+              <button className="btn btn-primary rounded-md" onClick={() => router.push("https://wa.me/6281211295729?text=Halo%20saya%20mau%20tanya")}>
                 Hubungi Kami
               </button>
             </nav>
@@ -304,6 +307,7 @@ const Header = ({ refs }: any) => {
 
 export default function UnicodeLandingPage() {
   const [radius, setRadius] = useState(250); // default hp
+  const router = useRouter();
 
   useEffect(() => {
     const handleResize = () => {
@@ -405,7 +409,7 @@ export default function UnicodeLandingPage() {
                 </p>
                 <div className="flex flex-col items-center justify-center max-w-xs mx-auto mt-8 sm:flex-row sm:max-w-none">
                   <button
-                    onClick={() => scrollToSection(layananRef)}
+                    onClick={() => scrollToSection(layananRef as any)}
                     className="btn btn-primary btn-lg rounded-lg"
                   >
                     Jelajahi Layanan
@@ -610,7 +614,7 @@ export default function UnicodeLandingPage() {
                 </p>
 
                 <button
-                  onClick={() => scrollToSection(kontakRef)}
+                  onClick={() => scrollToSection(kontakRef as any)}
                   className="w-full md:w-1/2 btn btn-primary rounded-md"
                 >
                   Hubungi Kami
@@ -725,6 +729,7 @@ export default function UnicodeLandingPage() {
                   transition={{ delay: 0.2, duration: 0.4 }}
                   viewport={{ once: true }}
                   className="mt-12"
+                  onClick={() => router.push("https://wa.me/6281211295729?text=Halo%20saya%20mau%20tanya")}
                 >
                   <a
                     href="#contact"
