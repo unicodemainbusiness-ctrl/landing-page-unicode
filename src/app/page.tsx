@@ -1,10 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
   ArrowRight,
   CheckCircle2,
-  Code2,
+  Code2, // Kita pakai ini untuk logo
   ChevronDown,
   Menu,
   X,
@@ -12,7 +12,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { STACKS } from "./data/stacks";
 import { FAQS } from "./data/faqs";
@@ -24,21 +24,41 @@ import CodeBlock from "./components/CodeBlock";
 
 // --- 1. DATA & CONTENT CONFIGURATION ---
 
-const NAV_LINKS = [
-  { name: "Services", href: "#services" },
-  { name: "Why Us", href: "#advantages" },
-  { name: "Projects", href: "#projects" },
-  { name: "Process", href: "#process" },
-  { name: "Pricing", href: "#pricing" },
-  { name: "FAQ", href: "#faq" },
+const STEPS = [
+  { title: "Konsultasi", desc: "Diskusi kebutuhan & fitur." },
+  { title: "Desain", desc: "Perancangan UI/UX & Prototype." },
+  { title: "Pengembangan", desc: "Coding & Implementasi sistem." },
+  { title: "Peluncuran", desc: "Testing, Deploy & Serah terima." },
 ];
 
-const STEPS = [
-  { title: "Consultation", desc: "Diskusi kebutuhan & fitur." },
-  { title: "Design", desc: "Perancangan UI/UX & Prototype." },
-  { title: "Development", desc: "Coding & Implementasi sistem." },
-  { title: "Launch", desc: "Testing, Deploy & Serah terima." },
-];
+// --- ANIMATION VARIANTS ---
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const cardVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+};
 
 // --- 2. SUB-COMPONENTS ---
 
@@ -51,7 +71,13 @@ const SectionHeader = ({
   subtitle: string;
   align?: "left" | "center";
 }) => (
-  <div className={`mb-12 ${align === "center" ? "text-center" : "text-left"}`}>
+  <motion.div
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-100px" }}
+    variants={fadeInUp}
+    className={`mb-12 ${align === "center" ? "text-center" : "text-left"}`}
+  >
     <h2 className="text-3xl md:text-4xl font-bold text-[#151D3A] mb-4">
       {title}
     </h2>
@@ -61,10 +87,15 @@ const SectionHeader = ({
         align === "center" ? "mx-auto" : ""
       }`}
     />
-  </div>
+  </motion.div>
 );
 
-const Navbar = () => {
+// Interface untuk Props Navbar
+interface NavbarProps {
+  onScrollTo: (section: string) => void;
+}
+
+const Navbar = ({ onScrollTo }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -74,8 +105,25 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleNavClick = (sectionName: string) => {
+    onScrollTo(sectionName);
+    setIsOpen(false);
+  };
+
+  const navItems = [
+    { name: "Layanan", key: "services" },
+    { name: "Keunggulan", key: "advantages" },
+    { name: "Proyek", key: "projects" },
+    { name: "Proses", key: "process" },
+    { name: "Harga", key: "pricing" },
+    { name: "FAQ", key: "faq" },
+  ];
+
   return (
-    <nav
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
           ? "bg-white/90 backdrop-blur-md shadow-sm py-4"
@@ -83,30 +131,34 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <div className="text-2xl font-bold text-[#151D3A] flex items-center gap-2">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
-            <Code2 size={20} />
+        {/* LOGO AREA: Menggunakan Icon Code2 agar tajam (Vector) */}
+        <div 
+          className="flex items-center gap-3 cursor-pointer" 
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-md">
+            <Code2 size={24} />
           </div>
-          UNICODE
+          <span className="text-xl font-bold text-[#151D3A] tracking-tight">UNICODE</span>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors"
+          {navItems.map((item) => (
+            <button
+              key={item.key}
+              onClick={() => handleNavClick(item.key)}
+              className="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors cursor-pointer"
             >
-              {link.name}
-            </a>
+              {item.name}
+            </button>
           ))}
-          <a
-            href="#contact"
+          <button
+            onClick={() => handleNavClick("contact")}
             className="px-5 py-2.5 bg-[#151D3A] text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
           >
             Hubungi Kami
-          </a>
+          </button>
         </div>
 
         {/* Mobile Toggle */}
@@ -128,35 +180,49 @@ const Navbar = () => {
             className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
           >
             <div className="flex flex-col p-6 gap-4">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-gray-700 font-medium"
+              {navItems.map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => handleNavClick(item.key)}
+                  className="text-gray-700 font-medium text-left"
                 >
-                  {link.name}
-                </a>
+                  {item.name}
+                </button>
               ))}
+              <button
+                onClick={() => handleNavClick("contact")}
+                className="text-left font-medium text-indigo-600"
+              >
+                Hubungi Kami
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   );
 };
 
-// --- FAQ Item Component (Revised Theme) ---
-const FaqItem = ({ item, isOpen, onClick }: { item: any, isOpen: boolean, onClick: () => void }) => {
+// --- FAQ Item Component ---
+const FaqItem = ({
+  item,
+  isOpen,
+  onClick,
+}: {
+  item: any;
+  isOpen: boolean;
+  onClick: () => void;
+}) => {
   return (
-    <div className="mb-4 border border-gray-100 rounded-2xl bg-white shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:border-indigo-100">
-      {/* Question Header */}
+    <motion.div
+      variants={cardVariant}
+      className="mb-4 border border-gray-100 rounded-2xl bg-white shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:border-indigo-100"
+    >
       <button
         onClick={onClick}
         className="w-full flex items-start sm:items-center justify-between p-5 text-left bg-white cursor-pointer"
       >
         <div className="flex items-start gap-4">
-          {/* Ubah tema warna ikon Q ke Indigo/Navy */}
           <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#151D3A] text-white flex items-center justify-center font-bold text-sm">
             Q
           </div>
@@ -171,7 +237,6 @@ const FaqItem = ({ item, isOpen, onClick }: { item: any, isOpen: boolean, onClic
         />
       </button>
 
-      {/* Answer Content */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -182,29 +247,25 @@ const FaqItem = ({ item, isOpen, onClick }: { item: any, isOpen: boolean, onClic
           >
             <div className="px-5 pb-6 pt-0">
               <div className="flex items-start gap-4 pl-0 sm:pl-0">
-                 {/* Ubah tema warna ikon A ke Indigo Muda */}
-                 <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm mt-1">
-                    A
-                 </div>
-                 <p className="text-gray-600 text-sm leading-relaxed pt-2">
-                   {item.a}
-                 </p>
+                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm mt-1">
+                  A
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed pt-2">
+                  {item.a}
+                </p>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 
 // --- 3. MAIN PAGE COMPONENT ---
 
 export default function UnicodeLandingRevised() {
-  // State untuk FAQ
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-
-  // State untuk Contact Form
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -212,46 +273,67 @@ export default function UnicodeLandingRevised() {
     message: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  // --- REFS DEFINITION FOR SMOOTH SCROLL ---
+  const servicesRef = useRef<HTMLElement>(null);
+  const advantagesRef = useRef<HTMLElement>(null);
+  const projectsRef = useRef<HTMLElement>(null);
+  const processRef = useRef<HTMLElement>(null);
+  const pricingRef = useRef<HTMLElement>(null);
+  const faqRef = useRef<HTMLElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
+
+  // Fungsi Scroll Handler
+  const scrollToSection = (section: string) => {
+    const refs: { [key: string]: React.RefObject<HTMLElement | null> } = {
+      services: servicesRef,
+      advantages: advantagesRef,
+      projects: projectsRef,
+      process: processRef,
+      pricing: pricingRef,
+      faq: faqRef,
+      contact: contactRef,
+    };
+
+    const targetRef = refs[section];
+    if (targetRef && targetRef.current) {
+      targetRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleWhatsApp = (e: React.FormEvent) => {
     e.preventDefault();
-    
     const { name, email, service, message } = formData;
-    const phoneNumber = "6285156276912"; // Nomor footer
-
-    // Template pesan
-    const text = `Halo UNICODE, saya tertarik untuk bekerja sama.\n\n` +
-      `*Nama:* ${name}\n` +
-      `*Email:* ${email}\n` +
-      `*Layanan:* ${service}\n` +
-      `*Pesan:* ${message}`;
-
-    // Encode URL
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
-    
-    // Buka di tab baru
+    const phoneNumber = "6285156276912";
+    const text = `Halo UNICODE, saya tertarik untuk bekerja sama.\n\n*Nama:* ${name}\n*Email:* ${email}\n*Layanan:* ${service}\n*Pesan:* ${message}`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      text
+    )}`;
     window.open(whatsappUrl, "_blank");
   };
 
   return (
     <div className="min-h-screen font-sans text-gray-800 bg-white selection:bg-indigo-100 selection:text-indigo-900">
-      <Navbar />
+      <Navbar onScrollTo={scrollToSection} />
 
       {/* 1. HERO SECTION */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        {/* Background Blobs */}
         <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-indigo-50 rounded-full blur-3xl opacity-50 translate-x-1/3 -translate-y-1/4"></div>
         <div className="absolute bottom-0 left-0 -z-10 w-[400px] h-[400px] bg-purple-50 rounded-full blur-3xl opacity-50 -translate-x-1/3 translate-y-1/4"></div>
 
         <div className="container mx-auto px-6 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="max-w-4xl mx-auto"
           >
             <span className="inline-block py-1 px-3 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-bold tracking-wide uppercase mb-6">
@@ -269,18 +351,18 @@ export default function UnicodeLandingRevised() {
               digital melalui solusi web yang cepat, responsif, dan elegan.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="#contact"
-                className="w-full sm:w-auto px-8 py-4 bg-[#151D3A] text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200"
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="w-full sm:w-auto px-8 py-4 bg-[#151D3A] text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 cursor-pointer"
               >
                 Konsultasi Gratis
-              </a>
-              <a
-                href="#projects"
-                className="w-full sm:w-auto px-8 py-4 bg-white text-[#151D3A] border border-gray-200 font-semibold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+              </button>
+              <button
+                onClick={() => scrollToSection("projects")}
+                className="w-full sm:w-auto px-8 py-4 bg-white text-[#151D3A] border border-gray-200 font-semibold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 Lihat Portfolio <ArrowRight size={18} />
-              </a>
+              </button>
             </div>
           </motion.div>
         </div>
@@ -288,7 +370,12 @@ export default function UnicodeLandingRevised() {
 
       {/* 2. TRUSTED BY / TECH STACK (Marquee) */}
       <section className="py-10 bg-[#151D3A] border-y border-gray-800 overflow-hidden">
-        <div className="flex relative">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="flex relative"
+        >
           <motion.div
             className="flex gap-12 whitespace-nowrap"
             animate={{ x: ["0%", "-50%"] }}
@@ -303,22 +390,33 @@ export default function UnicodeLandingRevised() {
               </span>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
       </section>
 
       {/* 3. SERVICES */}
-      <section id="services" className="py-24 bg-white">
+      <section
+        id="services"
+        ref={servicesRef}
+        className="py-24 bg-white scroll-mt-28"
+      >
         <div className="container mx-auto px-6">
           <SectionHeader
             title="Solusi Digital Komprehensif"
             subtitle="Apa yang bisa kami bangun untuk mempercepat pertumbuhan bisnis Anda?"
           />
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+          >
             {SERVICES.map((service, idx) => (
               <motion.div
                 key={idx}
-                whileHover={{ y: -5 }}
+                variants={cardVariant}
+                whileHover={{ y: -10 }}
                 className="p-8 border border-gray-100 rounded-2xl bg-white shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all group"
               >
                 <div className="w-14 h-14 bg-indigo-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 transition-colors">
@@ -335,27 +433,46 @@ export default function UnicodeLandingRevised() {
                 </p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* 4. ADVANTAGES (WHY US) */}
-      <section id="advantages" className="py-24 bg-gray-50/50">
+      <section
+        id="advantages"
+        ref={advantagesRef}
+        className="py-24 bg-gray-50/50 scroll-mt-28"
+      >
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#151D3A] mb-6">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <motion.h2
+                variants={fadeInUp}
+                className="text-3xl md:text-4xl font-bold text-[#151D3A] mb-6"
+              >
                 Mengapa Memilih Kami sebagai <br />{" "}
                 <span className="text-indigo-600">Partner Digital Anda?</span>
-              </h2>
-              <p className="text-gray-600 mb-8 text-lg">
+              </motion.h2>
+              <motion.p
+                variants={fadeInUp}
+                className="text-gray-600 mb-8 text-lg"
+              >
                 Bukan sekadar coding. Kami memberikan value bisnis melalui
                 transparansi, teknologi tepat guna, dan kecepatan eksekusi.
-              </p>
+              </motion.p>
 
               <div className="grid sm:grid-cols-2 gap-6">
                 {ADVANTAGES.map((adv, idx) => (
-                  <div key={idx} className="flex gap-4">
+                  <motion.div
+                    variants={cardVariant}
+                    key={idx}
+                    className="flex gap-4"
+                  >
                     <div className="mt-1">
                       <adv.icon className="text-indigo-600" size={24} />
                     </div>
@@ -363,28 +480,48 @@ export default function UnicodeLandingRevised() {
                       <h4 className="font-bold text-[#151D3A]">{adv.title}</h4>
                       <p className="text-sm text-gray-500 mt-1">{adv.desc}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
+
             {/* Visual Abstract for Tech */}
-            <CodeBlock />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+            >
+              <CodeBlock />
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* 5. PROJECTS (GALLERY) */}
-      <section id="projects" className="py-24 bg-white">
+      <section
+        id="projects"
+        ref={projectsRef}
+        className="py-24 bg-white scroll-mt-28"
+      >
         <div className="container mx-auto px-6">
           <SectionHeader
             title="Karya Terpilih"
             subtitle="Beberapa proyek yang telah kami selesaikan dengan standar kualitas tinggi."
           />
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-3 gap-8"
+          >
             {PROJECTS.map((project, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                variants={cardVariant}
+                whileHover={{ y: -5 }}
                 className="group rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all cursor-pointer"
               >
                 <div className="h-64 overflow-hidden relative">
@@ -408,59 +545,82 @@ export default function UnicodeLandingRevised() {
                   </h3>
                   <p className="text-sm text-gray-500">{project.tech}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* 6. PROCESS (Revised) */}
+      {/* 6. PROCESS (RESPONSIVE FIX) */}
       <section
         id="process"
-        className="py-24 bg-[#151D3A] text-white relative overflow-hidden" // Changed to bg-[#151D3A] (Footer BG)
+        ref={processRef}
+        className="py-24 bg-[#151D3A] text-white relative overflow-hidden scroll-mt-28"
       >
-        {/* Decorative Grid */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
 
         <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center mb-16"
+          >
             <h2 className="text-3xl font-bold mb-4">4 Langkah Mudah</h2>
             <p className="text-indigo-200">
               Proses kerja yang terstruktur untuk hasil maksimal.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            // RESPONSIVE GRID: 1 kolom (Mobile), 2 kolom (Tablet), 4 kolom (Desktop)
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12"
+          >
             {STEPS.map((step, idx) => (
-              <div key={idx} className="relative">
-                {/* Changed number to be inside a circle with contact button color */}
-                <div className="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center text-3xl font-bold text-white mb-6 shadow-lg shadow-indigo-900/30">
-                  0{idx + 1}
+              <motion.div key={idx} variants={cardVariant} className="relative flex flex-col items-center text-center lg:block lg:text-left">
+                <div className="relative z-10">
+                  <div className="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center text-3xl font-bold text-white mb-6 shadow-lg shadow-indigo-900/30 mx-auto lg:mx-0">
+                    0{idx + 1}
+                  </div>
                 </div>
                 <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                <p className="text-indigo-200 text-sm">{step.desc}</p>
-                {/* Connector Line (Adjusted position slightly for new circle size) */}
+                <p className="text-indigo-200 text-sm max-w-xs mx-auto lg:mx-0">{step.desc}</p>
+                
+                {/* Connector Line: Hanya tampil di Desktop (lg) karena layoutnya horizontal */}
                 {idx !== STEPS.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-20 w-full h-[2px] bg-indigo-800/50"></div>
+                  <div className="hidden lg:block absolute top-10 left-20 w-full h-[2px] bg-indigo-800/50 -z-0"></div>
                 )}
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* 7. PRICING */}
-      <section id="pricing" className="py-24 bg-white">
+      <section id="pricing" ref={pricingRef} className="py-24 bg-white scroll-mt-28">
         <div className="container mx-auto px-6">
           <SectionHeader
             title="Investasi Terbaik"
             subtitle="Pilih paket yang sesuai dengan skala bisnis Anda saat ini."
           />
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          >
             {PRICING.map((pkg, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                variants={cardVariant}
+                whileHover={pkg.recommended ? { scale: 1.05 } : { y: -5 }}
                 className={`relative p-8 rounded-2xl border ${
                   pkg.recommended
                     ? "border-indigo-600 bg-indigo-50/50 shadow-xl scale-105 z-10"
@@ -493,47 +653,64 @@ export default function UnicodeLandingRevised() {
                   ))}
                 </ul>
 
-                <a
-                  href="#contact"
-                  className={`block w-full py-3 rounded-lg text-center font-semibold transition-colors ${
+                <button
+                  onClick={() => scrollToSection("contact")}
+                  className={`block w-full py-3 rounded-lg text-center font-semibold transition-colors cursor-pointer ${
                     pkg.recommended
                       ? "bg-indigo-600 text-white hover:bg-indigo-700"
                       : "bg-gray-100 text-[#151D3A] hover:bg-gray-200"
                   }`}
                 >
                   Pilih Paket
-                </a>
-              </div>
+                </button>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* 8. FAQ */}
-      <section id="faq" className="py-24 bg-white border-t border-gray-100">
+      <section id="faq" ref={faqRef} className="py-24 bg-white border-t border-gray-100 scroll-mt-28">
         <div className="container mx-auto px-6 max-w-3xl">
           <SectionHeader
             title="Frequently Asked Questions"
             subtitle="Pertanyaan yang sering diajukan seputar layanan kami."
           />
-          <div className="space-y-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="space-y-4"
+          >
             {FAQS.map((item, idx) => (
-              <FaqItem 
-                key={idx} 
-                item={item} 
-                isOpen={openFaqIndex === idx} 
-                onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)} 
+              <FaqItem
+                key={idx}
+                item={item}
+                isOpen={openFaqIndex === idx}
+                onClick={() =>
+                  setOpenFaqIndex(openFaqIndex === idx ? null : idx)
+                }
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* 9. CONTACT / FOOTER */}
-      <section id="contact" className="bg-[#151D3A] text-white py-20">
+      <section
+        id="contact"
+        ref={contactRef}
+        className="bg-[#151D3A] text-white py-20 overflow-hidden scroll-mt-28"
+      >
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16">
-            <div>
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
               <h2 className="text-4xl font-bold mb-6">Siap Memulai Proyek?</h2>
               <p className="text-gray-400 mb-8 text-lg">
                 Jangan biarkan ide hebat Anda hanya menjadi wacana. Diskusikan
@@ -547,7 +724,9 @@ export default function UnicodeLandingRevised() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-400">Email Kami</p>
-                    <p className="font-medium">unicode.main.business@gmail.com</p>
+                    <p className="font-medium">
+                      unicode.main.business@gmail.com
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -571,9 +750,13 @@ export default function UnicodeLandingRevised() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <form 
+            <motion.form
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
               onSubmit={handleWhatsApp}
               className="bg-white/5 p-8 rounded-2xl border border-white/10 space-y-4"
             >
@@ -630,19 +813,20 @@ export default function UnicodeLandingRevised() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition-all"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg transition-all cursor-pointer"
               >
                 Kirim Pesan via WhatsApp
               </button>
-            </form>
+            </motion.form>
           </div>
 
-          <div className="border-t border-gray-800 mt-20 pt-8 text-center text-gray-500 text-sm">
+          <div className="border-t border-gray-800 mt-20 pt-8 text-center text-gray-400 text-sm">
             &copy; {new Date().getFullYear()} UNICODE. All rights reserved. Code
-            with <span className="text-red-500">❤</span> by Vocational Students.
+            with <span className="text-red-500">❤</span> by Vocational
+            Students.
           </div>
         </div>
       </section>
     </div>
   );
-};
+}
