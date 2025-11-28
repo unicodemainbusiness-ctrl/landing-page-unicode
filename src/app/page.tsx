@@ -508,7 +508,7 @@ export default function UnicodeLandingRevised() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-400">Email Kami</p>
-                    <p className="font-medium">hello@unicode.dev</p>
+                    <p className="font-medium">unicode.main.business@gmail.com</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -519,7 +519,7 @@ export default function UnicodeLandingRevised() {
                     <p className="text-sm text-gray-400">
                       WhatsApp (Fast Response)
                     </p>
-                    <p className="font-medium">+62 812 3456 7890</p>
+                    <p className="font-medium">+62 85156276912</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -528,7 +528,7 @@ export default function UnicodeLandingRevised() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-400">Lokasi</p>
-                    <p className="font-medium">Jakarta, Indonesia</p>
+                    <p className="font-medium">Jonggol, Indonesia</p>
                   </div>
                 </div>
               </div>
