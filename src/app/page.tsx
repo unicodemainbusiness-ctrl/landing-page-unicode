@@ -20,6 +20,7 @@ import { SERVICES } from "./data/services";
 import { ADVANTAGES } from "./data/advantages";
 import { PROJECTS } from "./data/projects";
 import { PRICING } from "./data/pricing";
+import { useRouter } from "next/navigation";
 
 // --- 1. DATA & CONTENT CONFIGURATION ---
 
@@ -557,7 +558,7 @@ export default function UnicodeLandingRevised() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm text-gray-400">Jenis Layanan</label>
-                <select className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors text-gray-400">
+                <select title="select" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors text-gray-400">
                   <option>Web Development</option>
                   <option>Mobile Apps</option>
                   <option>UI/UX Design</option>
