@@ -13,7 +13,7 @@ export const PROJECTS = [
   },
   {
     title: "Galeri Instagram Widget",
-    category: "UI/UX",
+    category: "Website",
     tech: "Next.js, Tailwind",
     image: "/assets/images/projects/Notion.png",
   },
