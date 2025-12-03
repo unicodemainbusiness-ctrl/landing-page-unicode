@@ -21,6 +21,7 @@ import { ADVANTAGES } from "./data/advantages";
 import { PROJECTS } from "./data/projects";
 import { PRICING } from "./data/pricing";
 import CodeBlock from "./components/CodeBlock";
+import { useRouter } from "next/navigation";
 
 // --- 1. DATA & CONTENT CONFIGURATION ---
 
@@ -75,7 +76,7 @@ const SectionHeader = ({
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin: "-100px" }}
-    variants={fadeInUp}
+    variants={fadeInUp as any}
     className={`mb-12 ${align === "center" ? "text-center" : "text-left"}`}
   >
     <h2 className="text-3xl md:text-4xl font-bold text-[#151D3A] mb-4">
@@ -454,14 +455,14 @@ export default function UnicodeLandingRevised() {
               variants={staggerContainer}
             >
               <motion.h2
-                variants={fadeInUp}
+                variants={fadeInUp as any}
                 className="text-3xl md:text-4xl font-bold text-[#151D3A] mb-6"
               >
                 Mengapa Memilih Kami sebagai <br />{" "}
                 <span className="text-indigo-600">Partner Digital Anda?</span>
               </motion.h2>
               <motion.p
-                variants={fadeInUp}
+                variants={fadeInUp as any}
                 className="text-gray-600 mb-8 text-lg"
               >
                 Bukan sekadar coding. Kami memberikan value bisnis melalui
@@ -566,7 +567,7 @@ export default function UnicodeLandingRevised() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={fadeInUp}
+            variants={fadeInUp as any}
             className="text-center mb-16"
           >
             <h2 className="text-3xl font-bold mb-4">4 Langkah Mudah</h2>
@@ -604,7 +605,7 @@ export default function UnicodeLandingRevised() {
       </section>
 
       {/* 7. PRICING */}
-      <section id="pricing" ref={pricingRef} className="py-24 bg-white scroll-mt-28">
+      {/* <section id="pricing" ref={pricingRef} className="py-24 bg-white scroll-mt-28">
         <div className="container mx-auto px-6">
           <SectionHeader
             title="Investasi Terbaik"
@@ -669,7 +670,7 @@ export default function UnicodeLandingRevised() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       {/* 8. FAQ */}
       <section id="faq" ref={faqRef} className="py-24 bg-white border-t border-gray-100 scroll-mt-28">
@@ -791,6 +792,7 @@ export default function UnicodeLandingRevised() {
               <div className="space-y-2 flex flex-col gap-1">
                 <label className="text-sm text-gray-400">Jenis Layanan</label>
                 <select
+                  title="select"
                   name="service"
                   value={formData.service}
                   onChange={handleInputChange}
