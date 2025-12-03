@@ -118,7 +118,6 @@ const Navbar = ({ onScrollTo }: NavbarProps) => {
     { name: "Keunggulan", key: "advantages" },
     { name: "Proyek", key: "projects" },
     { name: "Proses", key: "process" },
-    { name: "Harga", key: "pricing" },
     { name: "FAQ", key: "faq" },
   ];
 
