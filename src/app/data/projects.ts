@@ -1,20 +1,20 @@
 export const PROJECTS = [
   {
-    title: "E-Commerce Dashboard",
-    category: "Web App",
-    tech: "Next.js, Prisma",
-    image: "https://placehold.co/600x400/151D3A/white?text=Dashboard+Project",
+    title: "Delta Vokasi",
+    category: "Website",
+    tech: "React, Tailwind, Framer Motion",
+    image: "/assets/images/projects/Delta.png",
   },
   {
-    title: "Company Profile BUMN",
+    title: "Prima Bukit Nusa",
     category: "Website",
     tech: "React, Tailwind",
-    image: "https://placehold.co/600x400/151D3A/white?text=Compro+Project",
+    image: "/assets/images/projects/PBN.png",
   },
   {
-    title: "SaaS Landing Page",
+    title: "Galeri Instagram Widget",
     category: "UI/UX",
-    tech: "Figma, Framer",
-    image: "https://placehold.co/600x400/151D3A/white?text=Landing+Page",
+    tech: "Next.js, Tailwind",
+    image: "/assets/images/projects/Notion.png",
   },
 ];
